@@ -23,7 +23,9 @@
 # python -m venv venv
 
 # # Activate it (Windows) ----------- Always activate before working on the project
+# uvicorn app.main:app --reload
 # venv\Scripts\activate
+
 
 # pip install fastapi uvicorn python-multipart jinja2 pymongo python-dotenv
 

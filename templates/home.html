@@ -4,10 +4,10 @@
 
 {% block content %}
 <!-- Hero Section -->
-<div class="row align-items-center min-vh-75">
+<div class="row align-items-center py-5">
     <div class="col-lg-6">
         <h1 class="display-4 fw-bold text-primary">Jack Hohman</h1>
-        <h2 class="h3 text-muted mb-4">Python Developer & Software Engineer</h2>
+        <h2 class="h3 text-muted mb-4">Software Engineer</h2>
         <p class="lead mb-4">
             I'm passionate about building innovative software solutions using Python. 
             I love creating everything from web applications to machine learning models, 
@@ -22,7 +22,7 @@
         <div class="profile-image-container">
             <!-- Photo goes here -->
             <img src="{{ url_for('static', path='/images/profile.PNG') }}" 
-                 alt="Your Name" 
+                 alt="Jack Hohman" 
                  class="img-fluid rounded-circle shadow-lg profile-image"
                  style="width: 300px; height: 300px; object-fit: cover;">
         </div>
@@ -30,7 +30,7 @@
 </div>
 
 <!-- Skills Section -->
-<section class="my-5 py-5">
+<section class="my-4 py-4">
     <h2 class="text-center mb-5">Technical Skills</h2>
     <div class="row">
         <div class="col-md-4 text-center mb-4">
@@ -50,7 +50,7 @@
                     <i class="fas fa-database fa-3x text-primary mb-3"></i>
                     <h5 class="card-title">Database Design</h5>
                     <p class="card-text">
-                        Working with SQL databases (PostgreSQL, SQLite) and NoSQL databases (MongoDB).
+                        Working with SQL databases (MySQL) and NoSQL databases (MongoDB).
                     </p>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                     <i class="fas fa-brain fa-3x text-primary mb-3"></i>
                     <h5 class="card-title">Machine Learning</h5>
                     <p class="card-text">
-                        Building ML models with TensorFlow and scikit-learn for classification and prediction.
+                        Building ML models with TensorFlow and PyTorch for classification and prediction.
                     </p>
                 </div>
             </div>
@@ -78,10 +78,8 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Social Media Platform</h5>
-                        <p class="card-text">A full-featured social networking application with user authentication, posts, and social interactions.</p>
-                        <span class="badge bg-primary me-1">Python</span>
-                        <span class="badge bg-secondary me-1">Flask</span>
-                        <span class="badge bg-success">SQLite</span>
+                        <p class="card-text">A modular object-oriented social network simulation featuring user profiles, posts, comments, and engagement analytics. Users can follow, block, and interact with each other through text, image, and video posts. The system supports private profiles, mutual follower detection, trending content, hashtag analysis, and nested comment threads. Includes platform-wide features like user registration, feed generation, influencer discovery, and content moderation — all built with clean class architecture and encapsulated logic.</p>
+                        <span class="badge bg-info me-1">Python</span>
                     </div>
                 </div>
             </div>
@@ -89,10 +87,9 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Emoji Classifier</h5>
-                        <p class="card-text">Machine learning model that analyzes and classifies emojis using advanced NLP techniques.</p>
-                        <span class="badge bg-primary me-1">Python</span>
-                        <span class="badge bg-warning me-1">TensorFlow</span>
-                        <span class="badge bg-info">Pandas</span>
+                        <p class="card-text">An interactive neural network system that learns to recognize hand-drawn 5×5 pixel patterns and classify them as emojis like 😊, ❤️, or ⭐. Built from scratch using custom neuron and network classes, it features feedforward and backpropagation logic, one-hot encoding, and sigmoid activation. Users can draw emojis via console input, train the model with predefined or custom patterns, and track accuracy over time. The system includes canvas manipulation, emoji-specific training sets, engagement-based prediction confidence, and save/load functionality — all orchestrated through a modular, object-oriented architecture.</p>
+                        <span class="badge bg-info me-1">Python</span>
+                        <span class="badge bg-warning me-1">Neural Network</span>
                     </div>
                 </div>
             </div>
