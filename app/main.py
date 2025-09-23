@@ -1,13 +1,33 @@
-from fastapi import FastAPI, Request, HTTPException, Form
+from fastapi import FastAPI, Request, HTTPException, Form, Depends
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, RedirectResponse
-from contextlib import asynccontextmanager
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from contextual import asynccontextmanager
+import secrets
+import os
 
 from app.database import db, get_projects_collection, get_contacts_collection
 from app.models import Project, ProjectCreate, ContactCreate
 from bson import ObjectId
 from typing import List
+
+# Security for admin area
+security = HTTPBasic()
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "password123")
+
+def verify_admin(credentials: HTTPBasicCredentials = Depends(security)):
+    """Verify admin credentials"""
+    is_correct_username = secrets.compare_digest(credentials.username, ADMIN_USERNAME)
+    is_correct_password = secrets.compare_digest(credentials.password, ADMIN_PASSWORD)
+    if not (is_correct_username and is_correct_password):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid admin credentials",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials.username
 
 # Lifespan event handler for database connection
 @asynccontextmanager
@@ -258,7 +278,7 @@ async def add_project(
     return RedirectResponse(url="/admin", status_code=303)
 
 @app.delete("/admin/projects/{project_id}")
-async def delete_project(project_id: str):
+async def delete_project(project_id: str, admin_user: str = Depends(verify_admin)):
     try:
         projects_collection = get_projects_collection()
         result = projects_collection.delete_one({"_id": ObjectId(project_id)})
