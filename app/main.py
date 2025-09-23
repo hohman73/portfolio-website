@@ -29,6 +29,42 @@ def verify_admin(credentials: HTTPBasicCredentials = Depends(security)):
         )
     return credentials.username
 
+# Fallback data when database is unavailable
+FALLBACK_PROJECTS = [
+    {
+        "_id": "1",
+        "name": "Social Media Platform",
+        "description": "A social networking application with user profiles and posts",
+        "tech_stack": ["Python", "Flask", "SQLite"],
+        "status": "Completed",
+        "featured": True
+    },
+    {
+        "_id": "2",
+        "name": "Learning Platform", 
+        "description": "Educational platform with courses and progress tracking",
+        "tech_stack": ["Python", "Django", "PostgreSQL"],
+        "status": "Completed",
+        "featured": True
+    },
+    {
+        "_id": "3",
+        "name": "Music Streaming Platform",
+        "description": "Music player with playlists and user preferences", 
+        "tech_stack": ["Python", "FastAPI", "MongoDB"],
+        "status": "Completed",
+        "featured": False
+    },
+    {
+        "_id": "4",
+        "name": "Emoji Classifier",
+        "description": "Machine learning model to classify and analyze emojis",
+        "tech_stack": ["Python", "TensorFlow", "Pandas"],
+        "status": "In Progress",
+        "featured": True
+    }
+]
+
 # Lifespan event handler for database connection
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -89,42 +125,6 @@ app = FastAPI(
 # Set up templates and static files
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
-# Fallback data when database is unavailable
-FALLBACK_PROJECTS = [
-    {
-        "_id": "1",
-        "name": "Social Media Platform",
-        "description": "A social networking application with user profiles and posts",
-        "tech_stack": ["Python", "Flask", "SQLite"],
-        "status": "Completed",
-        "featured": True
-    },
-    {
-        "_id": "2",
-        "name": "Learning Platform", 
-        "description": "Educational platform with courses and progress tracking",
-        "tech_stack": ["Python", "Django", "PostgreSQL"],
-        "status": "Completed",
-        "featured": True
-    },
-    {
-        "_id": "3",
-        "name": "Music Streaming Platform",
-        "description": "Music player with playlists and user preferences", 
-        "tech_stack": ["Python", "FastAPI", "MongoDB"],
-        "status": "Completed",
-        "featured": False
-    },
-    {
-        "_id": "4",
-        "name": "Emoji Classifier",
-        "description": "Machine learning model to classify and analyze emojis",
-        "tech_stack": ["Python", "TensorFlow", "Pandas"],
-        "status": "In Progress",
-        "featured": True
-    }
-]
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
@@ -218,20 +218,31 @@ async def submit_contact(
         "success": success_msg
     })
 
-# Admin routes for project management
+# Test route to check if auth is working
+@app.get("/test-auth")
+async def test_auth(admin_user: str = Depends(verify_admin)):
+    return {"message": f"Hello {admin_user}, auth is working!"}
+
+# Admin routes for project management (PASSWORD PROTECTED)
 @app.get("/admin", response_class=HTMLResponse)
-async def admin(request: Request):
-    projects_collection = get_projects_collection()
-    contacts_collection = get_contacts_collection()
-    
-    all_projects = list(projects_collection.find({}))
-    recent_contacts = list(contacts_collection.find({}).sort("created_at", -1).limit(5))
-    
-    # Convert ObjectId to string
-    for project in all_projects:
-        project["_id"] = str(project["_id"])
-    for contact in recent_contacts:
-        contact["_id"] = str(contact["_id"])
+async def admin(request: Request, admin_user: str = Depends(verify_admin)):
+    try:
+        projects_collection = get_projects_collection()
+        contacts_collection = get_contacts_collection()
+        
+        all_projects = list(projects_collection.find({}))
+        recent_contacts = list(contacts_collection.find({}).sort("created_at", -1).limit(5))
+        
+        # Convert ObjectId to string
+        for project in all_projects:
+            project["_id"] = str(project["_id"])
+        for contact in recent_contacts:
+            contact["_id"] = str(contact["_id"])
+            
+    except Exception as e:
+        print(f"Admin panel database error: {e}")
+        all_projects = FALLBACK_PROJECTS
+        recent_contacts = []
     
     return templates.TemplateResponse("admin.html", {
         "request": request,
@@ -243,6 +254,7 @@ async def admin(request: Request):
 @app.post("/admin/projects")
 async def add_project(
     request: Request,
+    admin_user: str = Depends(verify_admin),
     name: str = Form(...),
     description: str = Form(...),
     tech_stack: str = Form(...),
