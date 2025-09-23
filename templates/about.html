@@ -9,11 +9,11 @@
         
         <div class="mb-5">
             <h2 class="h4 text-primary mb-3">My Story</h2>
-            <p class="lead">
+            <blockquote class="blockquote text-dark">
                 I'm a passionate Python developer with a love for creating innovative software solutions. 
                 My journey in programming started with curiosity and has grown into a dedicated pursuit 
                 of building meaningful applications that solve real-world problems.
-            </p>
+            </blockquote>
             <p>
                 Over the course of my development journey, I've worked on various projects ranging from 
                 social media platforms to machine learning applications. Each project has taught me 
@@ -34,8 +34,11 @@
                     <h5>Programming Languages</h5>
                     <ul class="list-unstyled">
                         <li><i class="fab fa-python text-primary me-2"></i>Python (Advanced)</li>
-                        <li><i class="fab fa-js text-warning me-2"></i>JavaScript (Learning)</li>
-                        <li><i class="fas fa-database text-info me-2"></i>SQL (Intermediate)</li>
+                        <li>
+                        <img src="{{ url_for('static', path='/images/java.png') }}" alt="Java logo" style="width:20px; height:20px; margin-right:8px;">
+                        Java (Intermediate)
+                        </li>
+                        <li><i class="fas fa-database text-info me-2"></i>SQL (Advanced)</li>
                     </ul>
                 </div>
                 <div class="col-md-6">
@@ -84,21 +87,18 @@
     <div class="col-lg-4">
         <div class="card shadow-sm mb-4">
             <div class="card-body text-center">
-                <img src="{{ url_for('static', path='/images/profile.jpg') }}" 
+                <img src="{{ url_for('static', path='/images/profile.PNG') }}" 
                      alt="Profile Photo" 
                      class="img-fluid rounded-circle mb-3" 
                      style="width: 150px; height: 150px; object-fit: cover;">
-                <h5 class="card-title">Your Name</h5>
-                <p class="text-muted">Python Developer</p>
+                <h5 class="card-title">Jack Hohman</h5>
+                <p class="text-muted">Software Engineer</p>
                 <div class="d-flex justify-content-center gap-3">
                     <a href="#" class="btn btn-outline-primary btn-sm">
                         <i class="fab fa-github"></i>
                     </a>
                     <a href="#" class="btn btn-outline-primary btn-sm">
                         <i class="fab fa-linkedin"></i>
-                    </a>
-                    <a href="#" class="btn btn-outline-primary btn-sm">
-                        <i class="fab fa-twitter"></i>
                     </a>
                 </div>
             </div>
@@ -111,13 +111,13 @@
             <div class="card-body">
                 <ul class="list-unstyled mb-0">
                     <li class="mb-2">
-                        <strong>Location:</strong> Your City, Country
+                        <strong>Location:</strong> Pittsburgh, PA
                     </li>
                     <li class="mb-2">
-                        <strong>Experience:</strong> X years coding
+                        <strong>Education:</strong> Penn State
                     </li>
                     <li class="mb-2">
-                        <strong>Projects:</strong> 4+ completed
+                        <strong>Projects:</strong> 5+ completed
                     </li>
                     <li class="mb-2">
                         <strong>Favorite Language:</strong> Python
