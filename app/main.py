@@ -218,11 +218,6 @@ async def submit_contact(
         "success": success_msg
     })
 
-# Test route to check if auth is working
-@app.get("/test-auth")
-async def test_auth(admin_user: str = Depends(verify_admin)):
-    return {"message": f"Hello {admin_user}, auth is working!"}
-
 # Admin routes for project management (PASSWORD PROTECTED)
 @app.get("/admin", response_class=HTMLResponse)
 async def admin(request: Request, admin_user: str = Depends(verify_admin)):
