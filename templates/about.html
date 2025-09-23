@@ -1,0 +1,156 @@
+<!-- About Page -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <h1 class="mb-4">About Me</h1>
+        
+        <div class="mb-5">
+            <h2 class="h4 text-primary mb-3">My Story</h2>
+            <p class="lead">
+                I'm a passionate Python developer with a love for creating innovative software solutions. 
+                My journey in programming started with curiosity and has grown into a dedicated pursuit 
+                of building meaningful applications that solve real-world problems.
+            </p>
+            <p>
+                Over the course of my development journey, I've worked on various projects ranging from 
+                social media platforms to machine learning applications. Each project has taught me 
+                valuable lessons about software architecture, user experience, and the importance of 
+                clean, maintainable code.
+            </p>
+            <p>
+                I believe in continuous learning and staying up-to-date with the latest technologies. 
+                Currently, I'm exploring web development with FastAPI, database design with MongoDB, 
+                and machine learning with TensorFlow.
+            </p>
+        </div>
+
+        <div class="mb-5">
+            <h2 class="h4 text-primary mb-3">Technical Expertise</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Programming Languages</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fab fa-python text-primary me-2"></i>Python (Advanced)</li>
+                        <li><i class="fab fa-js text-warning me-2"></i>JavaScript (Learning)</li>
+                        <li><i class="fas fa-database text-info me-2"></i>SQL (Intermediate)</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5>Frameworks & Tools</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-rocket text-success me-2"></i>FastAPI, Flask, Django</li>
+                        <li><i class="fas fa-brain text-danger me-2"></i>TensorFlow, Pandas</li>
+                        <li><i class="fas fa-code-branch text-dark me-2"></i>Git, VS Code</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-5">
+            <h2 class="h4 text-primary mb-3">What Drives Me</h2>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card border-left-primary h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Problem Solving</h5>
+                            <p class="card-text">I love tackling complex challenges and finding elegant solutions through code.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card border-left-success h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Continuous Learning</h5>
+                            <p class="card-text">Technology evolves rapidly, and I'm committed to growing my skills every day.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <h2 class="h4 text-primary mb-3">Beyond Coding</h2>
+            <p>
+                When I'm not coding, you can find me exploring new technologies, reading about software 
+                architecture, or working on personal projects. I believe that the best developers are 
+                well-rounded individuals who draw inspiration from various sources.
+            </p>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body text-center">
+                <img src="{{ url_for('static', path='/images/profile.jpg') }}" 
+                     alt="Profile Photo" 
+                     class="img-fluid rounded-circle mb-3" 
+                     style="width: 150px; height: 150px; object-fit: cover;">
+                <h5 class="card-title">Your Name</h5>
+                <p class="text-muted">Python Developer</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="#" class="btn btn-outline-primary btn-sm">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="btn btn-outline-primary btn-sm">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="btn btn-outline-primary btn-sm">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Quick Facts</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <strong>Location:</strong> Your City, Country
+                    </li>
+                    <li class="mb-2">
+                        <strong>Experience:</strong> X years coding
+                    </li>
+                    <li class="mb-2">
+                        <strong>Projects:</strong> 4+ completed
+                    </li>
+                    <li class="mb-2">
+                        <strong>Favorite Language:</strong> Python
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">Current Focus</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        FastAPI web development
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        MongoDB database design
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-spinner text-primary me-2"></i>
+                        Machine Learning with TensorFlow
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-clock text-warning me-2"></i>
+                        React frontend development
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

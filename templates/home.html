@@ -1,0 +1,105 @@
+<!-- Home Page -->
+ 
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="row align-items-center min-vh-75">
+    <div class="col-lg-6">
+        <h1 class="display-4 fw-bold text-primary">Jack Hohman</h1>
+        <h2 class="h3 text-muted mb-4">Python Developer & Software Engineer</h2>
+        <p class="lead mb-4">
+            I'm passionate about building innovative software solutions using Python. 
+            I love creating everything from web applications to machine learning models, 
+            and I'm always excited to take on new challenges.
+        </p>
+        <div class="d-flex gap-3">
+            <a href="/projects" class="btn btn-primary btn-lg">View My Work</a>
+            <a href="/contact" class="btn btn-outline-secondary btn-lg">Get In Touch</a>
+        </div>
+    </div>
+    <div class="col-lg-6 text-center">
+        <div class="profile-image-container">
+            <!-- Photo goes here -->
+            <img src="{{ url_for('static', path='/images/profile.PNG') }}" 
+                 alt="Your Name" 
+                 class="img-fluid rounded-circle shadow-lg profile-image"
+                 style="width: 300px; height: 300px; object-fit: cover;">
+        </div>
+    </div>
+</div>
+
+<!-- Skills Section -->
+<section class="my-5 py-5">
+    <h2 class="text-center mb-5">Technical Skills</h2>
+    <div class="row">
+        <div class="col-md-4 text-center mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <i class="fab fa-python fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Python Development</h5>
+                    <p class="card-text">
+                        Experienced in Python programming, web frameworks like FastAPI, Flask, and Django.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-database fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Database Design</h5>
+                    <p class="card-text">
+                        Working with SQL databases (PostgreSQL, SQLite) and NoSQL databases (MongoDB).
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Machine Learning</h5>
+                    <p class="card-text">
+                        Building ML models with TensorFlow and scikit-learn for classification and prediction.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Projects Preview -->
+<section class="my-5 py-5 bg-light rounded">
+    <div class="container">
+        <h2 class="text-center mb-5">Recent Projects</h2>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Social Media Platform</h5>
+                        <p class="card-text">A full-featured social networking application with user authentication, posts, and social interactions.</p>
+                        <span class="badge bg-primary me-1">Python</span>
+                        <span class="badge bg-secondary me-1">Flask</span>
+                        <span class="badge bg-success">SQLite</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Emoji Classifier</h5>
+                        <p class="card-text">Machine learning model that analyzes and classifies emojis using advanced NLP techniques.</p>
+                        <span class="badge bg-primary me-1">Python</span>
+                        <span class="badge bg-warning me-1">TensorFlow</span>
+                        <span class="badge bg-info">Pandas</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="/projects" class="btn btn-primary">View All Projects</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

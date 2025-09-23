@@ -1,0 +1,156 @@
+<!-- Projects Page -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-4 mb-3">My Projects</h1>
+    <p class="lead text-muted">
+        A showcase of the applications and tools I've built using Python and various technologies.
+    </p>
+</div>
+
+<div class="row">
+    {% for project in projects %}
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100 shadow-sm project-card">
+            <div class="card-body d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="card-title text-primary">{{ project.name }}</h5>
+                    <span class="badge {% if project.status == 'Completed' %}bg-success{% else %}bg-warning{% endif %}">
+                        {{ project.status }}
+                    </span>
+                </div>
+                
+                <p class="card-text flex-grow-1">{{ project.description }}</p>
+                
+                <div class="mb-3">
+                    <h6 class="text-muted mb-2">Tech Stack:</h6>
+                    <div>
+                        {% for tech in project.tech_stack %}
+                        <span class="badge bg-secondary me-1 mb-1">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="mt-auto">
+                    <div class="d-flex justify-content-between">
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            <i class="fab fa-github me-1"></i>View Code
+                        </a>
+                        <a href="#" class="btn btn-primary btn-sm">
+                            <i class="fas fa-external-link-alt me-1"></i>Live Demo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Skills and Tools Section -->
+<section class="mt-5 pt-5 border-top">
+    <h2 class="text-center mb-5">Technologies I Use</h2>
+    
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="text-center">
+                <h5 class="text-primary mb-3">Languages</h5>
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <span class="badge bg-primary">Python</span>
+                    <span class="badge bg-secondary">JavaScript</span>
+                    <span class="badge bg-info">SQL</span>
+                    <span class="badge bg-dark">HTML/CSS</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="text-center">
+                <h5 class="text-primary mb-3">Frameworks</h5>
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <span class="badge bg-success">FastAPI</span>
+                    <span class="badge bg-danger">Flask</span>
+                    <span class="badge bg-warning">Django</span>
+                    <span class="badge bg-info">Bootstrap</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="text-center">
+                <h5 class="text-primary mb-3">Databases</h5>
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <span class="badge bg-success">MongoDB</span>
+                    <span class="badge bg-primary">PostgreSQL</span>
+                    <span class="badge bg-secondary">SQLite</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="text-center">
+                <h5 class="text-primary mb-3">Tools</h5>
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <span class="badge bg-dark">Git</span>
+                    <span class="badge bg-primary">VS Code</span>
+                    <span class="badge bg-warning">TensorFlow</span>
+                    <span class="badge bg-info">Pandas</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Project Statistics -->
+<section class="mt-5 pt-5">
+    <div class="row text-center">
+        <div class="col-md-3 mb-4">
+            <div class="card border-0 bg-light">
+                <div class="card-body">
+                    <h3 class="text-primary">{{ projects|length }}</h3>
+                    <p class="text-muted mb-0">Total Projects</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card border-0 bg-light">
+                <div class="card-body">
+                    <h3 class="text-success">
+                        {{ projects|selectattr("status", "equalto", "Completed")|list|length }}
+                    </h3>
+                    <p class="text-muted mb-0">Completed</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card border-0 bg-light">
+                <div class="card-body">
+                    <h3 class="text-warning">
+                        {{ projects|selectattr("status", "equalto", "In Progress")|list|length }}
+                    </h3>
+                    <p class="text-muted mb-0">In Progress</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card border-0 bg-light">
+                <div class="card-body">
+                    <h3 class="text-info">5+</h3>
+                    <p class="text-muted mb-0">Technologies</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="text-center mt-5 pt-5 bg-primary text-white rounded p-5">
+    <h2 class="mb-3">Interested in Working Together?</h2>
+    <p class="lead mb-4">
+        I'm always open to discussing new opportunities and interesting projects.
+    </p>
+    <a href="/contact" class="btn btn-light btn-lg">Get In Touch</a>
+</section>
+{% endblock %}
