@@ -13,43 +13,46 @@ from typing import List
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: Connect to database
-    db.connect()
+    connected = db.connect()
     
-    # Initialize with sample data if no projects exist
-    projects_collection = get_projects_collection()
-    if projects_collection.count_documents({}) == 0:
-        sample_projects = [
-            {
-                "name": "Social Media Platform",
-                "description": "A social networking application with user profiles and posts",
-                "tech_stack": ["Python", "Flask", "SQLite"],
-                "status": "Completed",
-                "featured": True
-            },
-            {
-                "name": "Learning Platform", 
-                "description": "Educational platform with courses and progress tracking",
-                "tech_stack": ["Python", "Django", "PostgreSQL"],
-                "status": "Completed",
-                "featured": True
-            },
-            {
-                "name": "Music Streaming Platform",
-                "description": "Music player with playlists and user preferences", 
-                "tech_stack": ["Python", "FastAPI", "MongoDB"],
-                "status": "Completed",
-                "featured": False
-            },
-            {
-                "name": "Emoji Classifier",
-                "description": "Machine learning model to classify and analyze emojis",
-                "tech_stack": ["Python", "TensorFlow", "Pandas"],
-                "status": "In Progress",
-                "featured": True
-            }
-        ]
-        projects_collection.insert_many(sample_projects)
-        print("✅ Sample projects added to database")
+    if connected:
+        # Initialize with sample data if no projects exist
+        projects_collection = get_projects_collection()
+        if projects_collection.count_documents({}) == 0:
+            sample_projects = [
+                {
+                    "name": "Social Media Platform",
+                    "description": "A social networking application with user profiles and posts",
+                    "tech_stack": ["Python", "Flask", "SQLite"],
+                    "status": "Completed",
+                    "featured": True
+                },
+                {
+                    "name": "Learning Platform", 
+                    "description": "Educational platform with courses and progress tracking",
+                    "tech_stack": ["Python", "Django", "PostgreSQL"],
+                    "status": "Completed",
+                    "featured": True
+                },
+                {
+                    "name": "Music Streaming Platform",
+                    "description": "Music player with playlists and user preferences", 
+                    "tech_stack": ["Python", "FastAPI", "MongoDB"],
+                    "status": "Completed",
+                    "featured": False
+                },
+                {
+                    "name": "Emoji Classifier",
+                    "description": "Machine learning model to classify and analyze emojis",
+                    "tech_stack": ["Python", "TensorFlow", "Pandas"],
+                    "status": "In Progress",
+                    "featured": True
+                }
+            ]
+            projects_collection.insert_many(sample_projects)
+            print("✅ Sample projects added to database")
+    else:
+        print("⚠️ Starting without database connection")
     
     yield
     

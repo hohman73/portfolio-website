@@ -1,5 +1,3 @@
-# MongoDB Connection
-
 import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
@@ -21,7 +19,15 @@ class Database:
     def connect(self):
         """Connect to MongoDB"""
         try:
-            self.client = MongoClient(self.mongo_uri)
+            # Add SSL configuration for production environment
+            self.client = MongoClient(
+                self.mongo_uri,
+                tls=True,
+                tlsAllowInvalidCertificates=True,
+                serverSelectionTimeoutMS=5000,
+                connectTimeoutMS=5000,
+                maxPoolSize=10
+            )
             self.db = self.client[self.database_name]
             # Test the connection
             self.client.server_info()
