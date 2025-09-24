@@ -145,22 +145,47 @@
 <div id="alertContainer" class="mt-3"></div>
 
 <script>
-document.getElementById('contactForm').addEventListener('submit', function(e) {
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
-    // Show success message (for now, just a placeholder)
+
+    const formData = new FormData(this);
     const alertContainer = document.getElementById('alertContainer');
-    alertContainer.innerHTML = `
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i>
-            <strong>Message sent successfully!</strong> I'll get back to you as soon as possible.
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    `;
-    
-    // Reset form
-    this.reset();
-    
+
+    try {
+        const response = await fetch("/contact", {
+            method: "POST",
+            body: formData
+        });
+
+        if (response.ok) {
+            alertContainer.innerHTML = `
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <strong>Message sent successfully!</strong> I'll get back to you as soon as possible.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            this.reset();
+        } else {
+            alertContainer.innerHTML = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Oops!</strong> Something went wrong. Please try again later.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+        }
+    } catch (err) {
+        console.error("Error submitting form:", err);
+        alertContainer.innerHTML = `
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Error!</strong> Could not send your message. Please check your connection.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+    }
+
     // Scroll to alert
     alertContainer.scrollIntoView({ behavior: 'smooth' });
 });
