@@ -6,6 +6,9 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from contextlib import asynccontextmanager
 import secrets
 import os
+import aiosmtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 from app.database import db, get_projects_collection, get_contacts_collection
 from app.models import Project, ProjectCreate, ContactCreate
@@ -17,6 +20,46 @@ from datetime import datetime
 security = HTTPBasic()
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "password123")
+
+# Email configuration
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
+EMAIL_USERNAME = os.getenv("EMAIL_USERNAME", "")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD", "")
+EMAIL_FROM = os.getenv("EMAIL_FROM", EMAIL_USERNAME)
+EMAIL_TO = os.getenv("EMAIL_TO", EMAIL_USERNAME)
+
+async def send_email(subject: str, body: str, to_email: str = None):
+    """Send email notification"""
+    if not EMAIL_USERNAME or not EMAIL_PASSWORD:
+        print("⚠️ Email not configured, skipping email send")
+        return False
+    
+    try:
+        # Create message
+        message = MIMEMultipart("alternative")
+        message["Subject"] = subject
+        message["From"] = EMAIL_FROM
+        message["To"] = to_email or EMAIL_TO
+        
+        # Add body
+        text_part = MIMEText(body, "plain")
+        message.attach(text_part)
+        
+        # Send email
+        await aiosmtplib.send(
+            message,
+            hostname=EMAIL_HOST,
+            port=EMAIL_PORT,
+            start_tls=True,
+            username=EMAIL_USERNAME,
+            password=EMAIL_PASSWORD,
+        )
+        print(f"✅ Email sent successfully to {to_email or EMAIL_TO}")
+        return True
+    except Exception as e:
+        print(f"❌ Failed to send email: {e}")
+        return False
 
 def verify_admin(credentials: HTTPBasicCredentials = Depends(security)):
     """Verify admin credentials"""
@@ -204,14 +247,38 @@ async def submit_contact(
         contacts_collection = get_contacts_collection()
         result = contacts_collection.insert_one(contact_data.dict())
         
+        # Send email notification
+        email_subject = f"New Portfolio Contact: {subject}"
+        email_body = f"""
+New message from your portfolio website:
+
+Name: {firstName} {lastName}
+Email: {email}
+Subject: {subject}
+
+Message:
+{message}
+
+Newsletter Signup: {'Yes' if newsletter else 'No'}
+
+---
+This message was sent from your portfolio contact form.
+        """
+        
+        # Send email (don't fail if email fails)
+        email_sent = await send_email(email_subject, email_body.strip())
+        
         if result.inserted_id:
-            success_msg = "Thank you! Your message has been sent successfully. I'll get back to you soon!"
+            if email_sent:
+                success_msg = "Thank you! Your message has been sent successfully. I'll get back to you soon!"
+            else:
+                success_msg = "Thank you! Your message has been saved. I'll get back to you soon! (Email notification failed)"
         else:
             success_msg = "Thank you for your message! (Database currently unavailable, but your message was received)"
             
     except Exception as e:
         print(f"Contact form error: {e}")
-        success_msg = "Thank you for your message! (Database currently unavailable, but your message was received)"
+        success_msg = "Thank you for your message! There was a technical issue, but I'll still try to get back to you."
     
     return templates.TemplateResponse("contact.html", {
         "request": request,
