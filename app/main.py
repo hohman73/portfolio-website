@@ -31,6 +31,14 @@ EMAIL_TO = os.getenv("EMAIL_TO", EMAIL_USERNAME)
 
 async def send_email(subject: str, body: str, to_email: str = None):
     """Send email notification"""
+    print(f"🔧 Email config check:")
+    print(f"   EMAIL_HOST: {EMAIL_HOST}")
+    print(f"   EMAIL_PORT: {EMAIL_PORT}")
+    print(f"   EMAIL_USERNAME: {EMAIL_USERNAME[:5]}...@gmail.com" if EMAIL_USERNAME else "Not set")
+    print(f"   EMAIL_PASSWORD: {'Set' if EMAIL_PASSWORD else 'Not set'}")
+    print(f"   EMAIL_FROM: {EMAIL_FROM}")
+    print(f"   EMAIL_TO: {EMAIL_TO}")
+    
     if not EMAIL_USERNAME or not EMAIL_PASSWORD:
         print("⚠️ Email not configured, skipping email send")
         return False
@@ -46,6 +54,8 @@ async def send_email(subject: str, body: str, to_email: str = None):
         text_part = MIMEText(body, "plain")
         message.attach(text_part)
         
+        print(f"📧 Attempting to send email to: {to_email or EMAIL_TO}")
+        
         # Send email
         await aiosmtplib.send(
             message,
@@ -59,6 +69,7 @@ async def send_email(subject: str, body: str, to_email: str = None):
         return True
     except Exception as e:
         print(f"❌ Failed to send email: {e}")
+        print(f"❌ Error type: {type(e).__name__}")
         return False
 
 def verify_admin(credentials: HTTPBasicCredentials = Depends(security)):
@@ -232,6 +243,12 @@ async def submit_contact(
     message: str = Form(...),
     newsletter: bool = Form(False)
 ):
+    print("🔥 CONTACT FORM SUBMITTED!")
+    print(f"   Name: {firstName} {lastName}")
+    print(f"   Email: {email}")
+    print(f"   Subject: {subject}")
+    print(f"   Message: {message[:50]}...")
+    
     try:
         # Create contact message
         contact_data = ContactCreate(
@@ -244,10 +261,13 @@ async def submit_contact(
         )
         
         # Try to save to database
+        print("💾 Attempting to save to database...")
         contacts_collection = get_contacts_collection()
         result = contacts_collection.insert_one(contact_data.dict())
+        print(f"💾 Database save result: {result.inserted_id}")
         
         # Send email notification
+        print("📧 Attempting to send email...")
         email_subject = f"New Portfolio Contact: {subject}"
         email_body = f"""
 New message from your portfolio website:
@@ -267,6 +287,7 @@ This message was sent from your portfolio contact form.
         
         # Send email (don't fail if email fails)
         email_sent = await send_email(email_subject, email_body.strip())
+        print(f"📧 Email send result: {email_sent}")
         
         if result.inserted_id:
             if email_sent:
@@ -277,7 +298,10 @@ This message was sent from your portfolio contact form.
             success_msg = "Thank you for your message! (Database currently unavailable, but your message was received)"
             
     except Exception as e:
-        print(f"Contact form error: {e}")
+        print(f"❌ Contact form error: {e}")
+        print(f"❌ Error type: {type(e).__name__}")
+        import traceback
+        print(f"❌ Full traceback: {traceback.format_exc()}")
         success_msg = "Thank you for your message! There was a technical issue, but I'll still try to get back to you."
     
     return templates.TemplateResponse("contact.html", {
