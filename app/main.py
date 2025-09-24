@@ -11,6 +11,7 @@ from app.database import db, get_projects_collection, get_contacts_collection
 from app.models import Project, ProjectCreate, ContactCreate
 from bson import ObjectId
 from typing import List
+from datetime import datetime
 
 # Security for admin area
 security = HTTPBasic()
@@ -218,6 +219,11 @@ async def submit_contact(
         "success": success_msg
     })
 
+# Test route to check if auth is working
+@app.get("/test-auth")
+async def test_auth(admin_user: str = Depends(verify_admin)):
+    return {"message": f"Hello {admin_user}, auth is working!"}
+
 # Admin routes for project management (PASSWORD PROTECTED)
 @app.get("/admin", response_class=HTMLResponse)
 async def admin(request: Request, admin_user: str = Depends(verify_admin)):
@@ -281,6 +287,51 @@ async def add_project(
             return RedirectResponse(url="/admin", status_code=303)
     except Exception as e:
         print(f"Error adding project: {e}")
+    
+    return RedirectResponse(url="/admin", status_code=303)
+
+@app.post("/admin/projects/{project_id}/edit")
+async def edit_project(
+    project_id: str,
+    request: Request,
+    admin_user: str = Depends(verify_admin),
+    name: str = Form(...),
+    description: str = Form(...),
+    tech_stack: str = Form(...),
+    status: str = Form(...),
+    github_url: str = Form(""),
+    demo_url: str = Form(""),
+    featured: bool = Form(False)
+):
+    try:
+        # Parse tech stack from comma-separated string
+        tech_list = [tech.strip() for tech in tech_stack.split(",") if tech.strip()]
+        
+        # Create update data
+        update_data = {
+            "name": name,
+            "description": description,
+            "tech_stack": tech_list,
+            "status": status,
+            "github_url": github_url if github_url else None,
+            "demo_url": demo_url if demo_url else None,
+            "featured": featured,
+            "updated_at": datetime.utcnow()
+        }
+        
+        # Update in database
+        projects_collection = get_projects_collection()
+        result = projects_collection.update_one(
+            {"_id": ObjectId(project_id)}, 
+            {"$set": update_data}
+        )
+        
+        if result.modified_count:
+            return RedirectResponse(url="/admin", status_code=303)
+        else:
+            raise HTTPException(status_code=404, detail="Project not found")
+    except Exception as e:
+        print(f"Error updating project: {e}")
     
     return RedirectResponse(url="/admin", status_code=303)
 
