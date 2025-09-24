@@ -88,8 +88,8 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary me-1">
-                                            onclick="editProject('{{ project._id }}', '{{ project.name }}', '{{ project.description }}', '{{ project.status }}', '{{ project.tech_stack|join(", ") }}', '{{ project.github_url or "" }}', '{{ project.demo_url or "" }}', '{{ project.featured|string|lower }}')"
+                                    <button class="btn btn-sm btn-outline-primary me-1" 
+                                            onclick="editProject('{{ project._id }}', '{{ project.name }}', '{{ project.description }}', '{{ project.status }}', '{{ project.tech_stack|join(", ") }}', '{{ project.github_url or "" }}', '{{ project.demo_url or "" }}', {{ project.featured|lower }})">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteProject('{{ project._id }}')">
@@ -269,19 +269,18 @@
 
 <script>
 function editProject(projectId, name, description, status, techStack, githubUrl, demoUrl, featured) {
-    // Populate the edit form with passed data
     document.getElementById('edit_name').value = name;
     document.getElementById('edit_description').value = description.replace(/&#39;/g, "'").replace(/&quot;/g, '"');
     document.getElementById('edit_status').value = status;
     document.getElementById('edit_tech_stack').value = techStack;
     document.getElementById('edit_github_url').value = githubUrl;
     document.getElementById('edit_demo_url').value = demoUrl;
-    document.getElementById('edit_featured').checked = featured;
-    
-    // Update form action
+
+    // ✅ properly handle boolean conversion
+    document.getElementById('edit_featured').checked = (featured === 'true');
+
     document.getElementById('editProjectForm').action = `/admin/projects/${projectId}/edit`;
-    
-    // Show modal
+
     const modal = new bootstrap.Modal(document.getElementById('editProjectModal'));
     modal.show();
 }
@@ -300,6 +299,5 @@ function deleteProject(projectId) {
         });
     }
 }
-</script>
 </script>
 {% endblock %}
