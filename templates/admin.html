@@ -65,7 +65,14 @@
                         </thead>
                         <tbody>
                             {% for project in projects %}
-                            <tr>
+                            <tr data-project-id="{{ project._id }}"
+                                data-project-name="{{ project.name }}"
+                                data-project-description="{{ project.description }}"
+                                data-project-status="{{ project.status }}"
+                                data-project-tech="{{ project.tech_stack|join(', ') }}"
+                                data-project-github="{{ project.github_url or '' }}"
+                                data-project-demo="{{ project.demo_url or '' }}"
+                                data-project-featured="{{ project.featured }}">
                                 <td>{{ project.name }}</td>
                                 <td>
                                     <span class="badge {% if project.status == 'Completed' %}bg-success{% elif project.status == 'In Progress' %}bg-warning{% else %}bg-secondary{% endif %}">
@@ -88,8 +95,7 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary me-1" 
-                                            onclick="editProject('{{ project._id }}', '{{ project.name }}', '{{ project.description }}', '{{ project.status }}', '{{ project.tech_stack|join(", ") }}', '{{ project.github_url or "" }}', '{{ project.demo_url or "" }}', {{ project.featured|lower }})">
+                                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editProject(this)">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteProject('{{ project._id }}')">
@@ -268,19 +274,33 @@
 </div>
 
 <script>
-function editProject(projectId, name, description, status, techStack, githubUrl, demoUrl, featured) {
+function editProject(button) {
+    // Get the row containing the button
+    const row = button.closest('tr');
+    
+    // Extract data from data attributes
+    const projectId = row.dataset.projectId;
+    const name = row.dataset.projectName;
+    const description = row.dataset.projectDescription;
+    const status = row.dataset.projectStatus;
+    const techStack = row.dataset.projectTech;
+    const githubUrl = row.dataset.projectGithub;
+    const demoUrl = row.dataset.projectDemo;
+    const featured = row.dataset.projectFeatured === 'True';
+    
+    // Populate the edit form
     document.getElementById('edit_name').value = name;
-    document.getElementById('edit_description').value = description.replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+    document.getElementById('edit_description').value = description;
     document.getElementById('edit_status').value = status;
     document.getElementById('edit_tech_stack').value = techStack;
     document.getElementById('edit_github_url').value = githubUrl;
     document.getElementById('edit_demo_url').value = demoUrl;
-
-    // ✅ properly handle boolean conversion
-    document.getElementById('edit_featured').checked = (featured === 'true');
-
+    document.getElementById('edit_featured').checked = featured;
+    
+    // Update form action
     document.getElementById('editProjectForm').action = `/admin/projects/${projectId}/edit`;
-
+    
+    // Show modal
     const modal = new bootstrap.Modal(document.getElementById('editProjectModal'));
     modal.show();
 }
