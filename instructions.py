@@ -26,6 +26,8 @@
 # uvicorn app.main:app --reload
 # venv\Scripts\activate
 
+# https://portfolio-website-suka.onrender.com/
+
 
 # pip install fastapi uvicorn python-multipart jinja2 pymongo python-dotenv
 
