@@ -35,9 +35,11 @@
                 
                 <div class="mt-auto">
                     <div class="d-flex justify-content-between">
-                        <a href="#" class="btn btn-outline-primary btn-sm">
+                        {% if project.github_url %}
+                        <a href="{{ project.github_url }}" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">
                             <i class="fab fa-github me-1"></i>View Code
                         </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
