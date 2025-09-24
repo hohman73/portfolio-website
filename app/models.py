@@ -33,7 +33,7 @@ class PyObjectId(ObjectId):
 class Project(BaseModel):
     id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias="_id")
     name: str = Field(..., min_length=1, max_length=100)
-    description: str = Field(..., min_length=10, max_length=500)
+    description: str = Field(..., min_length=0, max_length=500)
     tech_stack: List[str] = Field(..., min_items=1)
     status: str = Field(..., pattern="^(Completed|In Progress|Planning)$")
     github_url: Optional[str] = None
@@ -105,5 +105,5 @@ class ContactCreate(BaseModel):
     last_name: str = Field(..., min_length=1, max_length=50)
     email: EmailStr
     subject: str = Field(..., min_length=1, max_length=100)
-    message: str = Field(..., min_length=10, max_length=1000)
+    message: str = Field(..., min_length=0, max_length=1000)
     newsletter_signup: bool = False
