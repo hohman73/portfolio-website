@@ -19,17 +19,8 @@
 # ├── requirements.txt        # Python dependencies
 # └── .env                    # Environment variables (passwords, etc.)
 
-# # Create virtual environment
-# python -m venv venv
-
-# # Activate it (Windows) ----------- Always activate before working on the project
 # uvicorn app.main:app --reload
 # venv\Scripts\activate
-
-# https://portfolio-website-suka.onrender.com/
-
-
-# pip install fastapi uvicorn python-multipart jinja2 pymongo python-dotenv
 
 # FastAPI: Web framework (like Flask but more modern)
 # Uvicorn: Server to run your FastAPI app

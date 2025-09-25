@@ -89,7 +89,7 @@ class ContactMessage(BaseModel):
     last_name: str = Field(..., min_length=1, max_length=50)
     email: EmailStr
     subject: str = Field(..., min_length=1, max_length=100)
-    message: str = Field(..., min_length=10, max_length=1000)
+    message: str = Field(..., min_length=1, max_length=1000)
     newsletter_signup: bool = False
     created_at: datetime = Field(default_factory=datetime.utcnow)
     read: bool = False
